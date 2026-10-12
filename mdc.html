@@ -3,404 +3,245 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LSPD | Mobile Data Computer</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Ikony -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Gcasino - Moderní Neonové Kasino (NC)</title>
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #0B0F19; }
-        ::-webkit-scrollbar-thumb { background: #1e3a8a; border-radius: 4px; }
-        /* Třída pro skrytí elementů */
-        .hidden { display: none !important; }
-    </style>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'mdc-bg': '#0B0F19',
-                        'mdc-panel': '#111827',
-                        'mdc-blue': '#1e3a8a',
-                        'mdc-blue-hover': '#1e40af',
-                        'mdc-accent': '#ef4444',
-                    }
-                }
-            }
-        }
-    </script>
-</head>
-<body class="bg-mdc-bg text-slate-300 h-screen overflow-hidden flex">
-
-    <!-- ========================================== -->
-    <!-- LOGIN SCREEN -->
-    <!-- ========================================== -->
-    <div id="login-screen" class="absolute inset-0 z-50 bg-mdc-bg flex items-center justify-center">
-        <div class="bg-mdc-panel p-10 rounded-xl border border-slate-800 shadow-2xl w-full max-w-md text-center">
-            <div class="text-5xl text-mdc-blue mb-4"><i class="fa-solid fa-shield-halved"></i></div>
-            <h1 class="text-2xl font-bold text-white mb-2">San Andreas Police</h1>
-            <p class="text-slate-500 text-sm mb-8">Mobile Data Computer v2.0</p>
-            
-            <!-- Simulace přihlášení -->
-            <button onclick="login()" class="w-full bg-[#5865F2] hover:bg-[#4752C4] text-white font-medium py-3 px-4 rounded-md transition duration-200 flex items-center justify-center gap-2">
-                <i class="fa-brands fa-discord text-xl"></i>
-                Přihlásit se pomocí Discordu
-            </button>
-            <p class="text-xs text-slate-600 mt-4">Systém automaticky spáruje vaši hodnost z Discordu.</p>
-        </div>
-    </div>
-
-    <!-- ========================================== -->
-    <!-- MAIN APP (Skryto před přihlášením) -->
-    <!-- ========================================== -->
-    <div id="main-app" class="hidden w-full h-full flex">
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #070913; color: #f8fafc; min-height: 100vh; display: flex; flex-direction: column; }
+        .neon-glow { text-shadow: 0 0 10px rgba(0, 242, 255, 0.5), 0 0 20px rgba(0, 242, 255, 0.3); }
+        .neon-box { box-shadow: 0 0 15px rgba(0, 242, 255, 0.15), inset 0 0 15px rgba(0, 242, 255, 0.05); border: 1px solid rgba(0, 242, 255, 0.2); }
+        .neon-button { background: linear-gradient(135deg, #00f2ff 0%, #3b82f6 100%); color: #000; box-shadow: 0 0 20px rgba(0, 242, 255, 0.4); transition: all 0.3s ease; border: none; cursor: pointer; font-weight: 700; }
+        .neon-button:hover { box-shadow: 0 0 30px rgba(0, 242, 255, 0.8); transform: translateY(-2px); }
+        .glass-panel { background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 1rem; }
         
-        <!-- SIDEBAR -->
-        <aside class="w-64 bg-mdc-panel border-r border-slate-800 flex flex-col z-10">
-            <div class="h-16 flex items-center justify-center border-b border-slate-800 gap-3">
-                <i class="fa-solid fa-shield-halved text-mdc-blue text-xl"></i>
-                <span class="text-lg font-bold tracking-wider text-white">LSPD MDC</span>
-            </div>
-            
-            <nav class="flex-1 px-3 py-6 space-y-1 overflow-y-auto">
-                <button onclick="switchTab('dashboard')" class="tab-btn w-full flex items-center gap-3 px-3 py-2.5 bg-mdc-blue/20 text-blue-400 rounded-md font-medium text-sm text-left">
-                    <i class="fa-solid fa-table-columns w-5 text-center"></i> Dashboard
-                </button>
-                
-                <div class="pt-4 pb-1 pl-3">
-                    <p class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Database</p>
-                </div>
-                <button onclick="switchTab('persons')" class="tab-btn w-full flex items-center gap-3 px-3 py-2 text-sm text-slate-400 hover:bg-slate-800 hover:text-white rounded-md text-left">
-                    <i class="fa-solid fa-users w-5 text-center"></i> Persons
-                </button>
-                <button onclick="switchTab('vehicles')" class="tab-btn w-full flex items-center gap-3 px-3 py-2 text-sm text-slate-400 hover:bg-slate-800 hover:text-white rounded-md text-left">
-                    <i class="fa-solid fa-car w-5 text-center"></i> Vehicles
-                </button>
+        header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; border-bottom: 1px solid rgba(0, 242, 255, 0.2); position: sticky; top: 0; z-index: 50; background: rgba(7, 9, 19, 0.95); }
+        .logo { display: flex; align-items: center; gap: 0.75rem; cursor: pointer; }
+        .logo-icon { width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, #00f2ff, #3b82f6); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.5rem; color: #000; box-shadow: 0 0 15px rgba(0,242,255,0.4); }
+        .logo-text { font-size: 1.5rem; font-weight: 800; background: linear-gradient(90deg, #00f2ff, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-                <div class="pt-4 pb-1 pl-3">
-                    <p class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Department</p>
-                </div>
-                <button onclick="switchTab('reports')" class="tab-btn w-full flex items-center gap-3 px-3 py-2 text-sm text-slate-400 hover:bg-slate-800 hover:text-white rounded-md text-left">
-                    <i class="fa-solid fa-file-lines w-5 text-center"></i> Reports
-                </button>
-                <button class="w-full flex items-center justify-between px-3 py-2 text-sm text-slate-400 hover:bg-slate-800 hover:text-white rounded-md text-left">
-                    <span class="flex items-center gap-3"><i class="fa-solid fa-gavel w-5 text-center"></i> Warrants</span>
-                    <span class="bg-red-500/20 text-red-500 text-[10px] px-1.5 py-0.5 rounded font-bold">3</span>
-                </button>
-            </nav>
-            
-            <!-- Log out button vespod -->
-            <div class="p-4 border-t border-slate-800">
-                <button onclick="logout()" class="w-full flex items-center gap-3 px-3 py-2 text-sm text-slate-500 hover:text-red-400 transition-colors">
-                    <i class="fa-solid fa-right-from-bracket"></i> Odhlásit se
-                </button>
-            </div>
-        </aside>
+        nav { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        .tab-btn { background: transparent; border: 1px solid transparent; color: #94a3b8; padding: 0.5rem 0.8rem; border-radius: 0.5rem; cursor: pointer; font-weight: 500; font-family: inherit; transition: 0.2s; font-size: 0.9rem; }
+        .tab-btn:hover { color: #fff; background: rgba(59, 130, 246, 0.1); }
+        .tab-btn.active { background: rgba(0, 242, 255, 0.15); border-color: #00f2ff; color: #00f2ff; box-shadow: 0 0 15px rgba(0, 242, 255, 0.3); }
 
-        <!-- MAIN CONTENT AREA -->
-        <main class="flex-1 flex flex-col relative">
-            
-            <!-- TOP NAVBAR -->
-            <header class="h-16 bg-mdc-panel border-b border-slate-800 flex items-center justify-between px-6 z-10">
-                <!-- Global Search -->
-                <div class="w-96 relative">
-                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-500 text-sm"></i>
-                    <input type="text" placeholder="Global Search (ID, Jméno, SPZ)..." class="w-full bg-slate-900 border border-slate-700 text-sm rounded-md pl-9 pr-4 py-2 focus:outline-none focus:border-mdc-blue text-white placeholder-slate-500 transition-colors">
-                </div>
+        .user-box { display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 1rem; cursor: pointer; }
+        .user-box:hover { border-color: rgba(0, 242, 255, 0.5); }
 
-                <!-- Můj Profil (Vpravo nahoře) -->
-                <div onclick="toggleProfileModal()" class="flex items-center space-x-3 cursor-pointer hover:bg-slate-800 p-1.5 pr-3 rounded-lg transition-colors border border-transparent hover:border-slate-700">
-                    <div class="text-right">
-                        <p id="user-name" class="text-sm font-semibold text-white">Načítání...</p>
-                        <p id="user-rank" class="text-xs text-blue-400">Načítání...</p>
-                    </div>
-                    <!-- Zde se načte Discord avatar -->
-                    <img id="user-avatar" src="" alt="Profile" class="h-9 w-9 rounded-full border-2 border-mdc-blue">
-                </div>
-            </header>
+        main { flex: 1; max-width: 1200px; width: 100%; margin: 0 auto; padding: 2rem 1rem; }
+        .section { display: none; }
+        .section.active { display: block; }
 
-            <!-- TABS CONTENT CONTAINER -->
-            <div class="flex-1 overflow-y-auto p-6">
-                
-                <!-- DASHBOARD TAB -->
-                <div id="tab-dashboard" class="tab-content">
-                    <h1 class="text-2xl font-semibold text-white mb-6">Dashboard</h1>
-                    
-                    <!-- Stats Grid -->
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                        <div class="bg-slate-800/40 border border-slate-700 p-4 rounded-lg">
-                            <p class="text-xs text-slate-400 font-medium uppercase">Active BOLO</p>
-                            <p class="text-2xl font-bold text-orange-400 mt-1">2</p>
-                        </div>
-                        <div class="bg-slate-800/40 border border-slate-700 p-4 rounded-lg">
-                            <p class="text-xs text-slate-400 font-medium uppercase">Active Warrants</p>
-                            <p class="text-2xl font-bold text-red-500 mt-1">7</p>
-                        </div>
-                        <div class="bg-slate-800/40 border border-slate-700 p-4 rounded-lg">
-                            <p class="text-xs text-slate-400 font-medium uppercase">Arrests (My Shift)</p>
-                            <p class="text-2xl font-bold text-white mt-1">0</p>
-                        </div>
-                        <div class="bg-slate-800/40 border border-slate-700 p-4 rounded-lg">
-                            <p class="text-xs text-slate-400 font-medium uppercase">Server Status</p>
-                            <p class="text-2xl font-bold text-green-400 mt-1"><i class="fa-solid fa-signal text-sm"></i> Online</p>
-                        </div>
-                    </div>
+        .grid-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
+        .game-card { padding: 1.5rem; cursor: pointer; transition: 0.3s; }
+        .game-card:hover { border-color: #00f2ff; transform: translateY(-3px); }
 
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        <!-- Quick Actions -->
-                        <div class="bg-slate-800/40 border border-slate-700 rounded-lg p-5">
-                            <h2 class="text-sm font-semibold text-white uppercase tracking-wider mb-4 border-b border-slate-700 pb-2">Quick Actions</h2>
-                            <div class="space-y-2">
-                                <button class="w-full bg-mdc-blue hover:bg-mdc-blue-hover text-white text-sm py-2 rounded transition-colors shadow-lg shadow-mdc-blue/20">Vytvořit Report</button>
-                                <button class="w-full bg-slate-700 hover:bg-slate-600 text-white text-sm py-2 rounded transition-colors">Zadat BOLO</button>
-                                <button class="w-full bg-slate-700 hover:bg-slate-600 text-white text-sm py-2 rounded transition-colors">Nová Pokuta</button>
-                            </div>
-                        </div>
+        .btn-glass { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(0, 242, 255, 0.3); color: #00f2ff; padding: 0.5rem 1rem; border-radius: 0.75rem; cursor: pointer; font-family: inherit; font-weight: 600; transition: 0.2s; }
+        .btn-glass:hover { background: rgba(0, 242, 255, 0.1); }
 
-                        <!-- Active BOLO/Warrants Table -->
-                        <div class="col-span-2 bg-slate-800/40 border border-slate-700 rounded-lg p-5">
-                            <h2 class="text-sm font-semibold text-white uppercase tracking-wider mb-4 border-b border-slate-700 pb-2 flex items-center gap-2">
-                                <span class="h-2 w-2 rounded-full bg-red-500 animate-pulse"></span> Prioritní Hlášení
-                            </h2>
-                            <div class="overflow-x-auto">
-                                <table class="w-full text-sm text-left">
-                                    <thead>
-                                        <tr class="text-slate-500">
-                                            <th class="pb-3 font-medium">Typ</th>
-                                            <th class="pb-3 font-medium">Předmět</th>
-                                            <th class="pb-3 font-medium">Důvod</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="text-slate-300">
-                                        <tr class="border-t border-slate-700/50">
-                                            <td class="py-3"><span class="bg-red-500/10 text-red-500 px-2 py-1 rounded text-xs border border-red-500/20">WARRANT</span></td>
-                                            <td class="py-3 text-white">John Doe</td>
-                                            <td class="py-3 text-slate-400">Vražda policisty, Útěk</td>
-                                        </tr>
-                                        <tr class="border-t border-slate-700/50">
-                                            <td class="py-3"><span class="bg-orange-500/10 text-orange-500 px-2 py-1 rounded text-xs border border-orange-500/20">VEH. BOLO</span></td>
-                                            <td class="py-3 text-white">Sultan (SPZ: LS-992)</td>
-                                            <td class="py-3 text-slate-400">Ujeto z místa činu (10-80)</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        input[type="text"] { width: 100%; padding: 0.75rem 1rem; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(0, 242, 255, 0.3); border-radius: 0.75rem; color: #fff; font-family: inherit; }
+        input[type="text"]:focus { outline: none; border-color: #00f2ff; }
 
-                <!-- PERSONS TAB (Databáze) -->
-                <div id="tab-persons" class="tab-content hidden h-full flex flex-col">
-                    <h1 class="text-2xl font-semibold text-white mb-4">Person Database</h1>
-                    
-                    <!-- Search input -->
-                    <div class="flex gap-2 mb-6">
-                        <input type="text" id="person-search-input" placeholder="Zadejte jméno, příjmení nebo ID postavy (Owl Gaming)..." class="flex-1 bg-slate-900 border border-slate-700 text-sm rounded-md px-4 py-2.5 focus:outline-none focus:border-mdc-blue text-white">
-                        <button onclick="searchMockPerson()" class="bg-mdc-blue hover:bg-mdc-blue-hover text-white px-6 py-2.5 rounded-md font-medium transition-colors">Hledat</button>
-                    </div>
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; z-index: 100; padding: 1rem; }
+        .modal.active { display: flex; }
+        .modal-content { max-width: 420px; width: 100%; padding: 2rem; }
 
-                    <!-- Results Table -->
-                    <div class="bg-slate-800/40 border border-slate-700 rounded-lg flex-1">
-                        <table class="w-full text-sm text-left">
-                            <thead class="bg-slate-900/50 text-slate-400 border-b border-slate-700">
-                                <tr>
-                                    <th class="py-3 px-4 font-medium">Jméno</th>
-                                    <th class="py-3 px-4 font-medium">Char. ID</th>
-                                    <th class="py-3 px-4 font-medium">Pohlaví</th>
-                                    <th class="py-3 px-4 font-medium">Status</th>
-                                    <th class="py-3 px-4 font-medium text-right">Akce</th>
-                                </tr>
-                            </thead>
-                            <tbody id="person-results" class="text-slate-300">
-                                <!-- Data se načtou přes JS -->
-                                <tr><td colspan="5" class="py-8 text-center text-slate-500">Zadejte jméno pro vyhledání.</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                
-                <!-- PLACEHOLDER PRO VEHICLES A REPORTS -->
-                <div id="tab-vehicles" class="tab-content hidden h-full">
-                    <h1 class="text-2xl font-semibold text-white mb-4">Vehicle Database</h1>
-                    <p class="text-slate-500">Zde bude vyhledávání aut podle SPZ / VIN...</p>
-                </div>
-                
-                <div id="tab-reports" class="tab-content hidden h-full">
-                    <h1 class="text-2xl font-semibold text-white mb-4">Police Reports</h1>
-                    <p class="text-slate-500">Zde budou vyšetřovací spisy...</p>
-                </div>
+        footer { text-align: center; padding: 1.5rem; border-top: 1px solid rgba(0, 242, 255, 0.2); font-size: 0.85rem; color: #64748b; background: rgba(7, 9, 19, 0.95); }
+    </style>
+</head>
+<body>
 
-            </div>
-        </main>
-    </div>
-
-    <!-- ========================================== -->
-    <!-- MODALS (Vyskakovací okna) -->
-    <!-- ========================================== -->
-
-    <!-- Modální okno: Můj Profil (Vpravo nahoře) -->
-    <div id="modal-profile" class="hidden absolute inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center">
-        <div class="bg-mdc-panel border border-slate-700 rounded-xl w-full max-w-md overflow-hidden shadow-2xl transform transition-all">
-            <!-- Header -->
-            <div class="bg-slate-800 px-6 py-4 flex justify-between items-center border-b border-slate-700">
-                <h3 class="text-white font-semibold">Můj Profil (Discord Sync)</h3>
-                <button onclick="toggleProfileModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <!-- Body -->
-            <div class="p-6">
-                <div class="flex items-center gap-4 mb-6">
-                    <img id="modal-avatar" src="" alt="Avatar" class="h-20 w-20 rounded-full border-2 border-mdc-blue shadow-lg">
-                    <div>
-                        <h4 id="modal-name" class="text-xl font-bold text-white">Jméno</h4>
-                        <p id="modal-rank" class="text-mdc-blue font-medium text-sm">Hodnost</p>
-                        <p id="modal-badge" class="text-slate-400 text-xs mt-1">Badge: Očekává se</p>
-                    </div>
-                </div>
-
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-xs text-slate-500 mb-1">Změnit Badge Number</label>
-                        <input type="text" placeholder="např. 4092" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white">
-                    </div>
-                    <div>
-                        <label class="block text-xs text-slate-500 mb-1">Fotografie (Z Discordu)</label>
-                        <p class="text-xs text-slate-400 p-2 bg-slate-900 border border-slate-700 rounded">Vaše fotografie je automaticky synchronizována s vaším Discord profilem. Změňte si avatar na Discordu.</p>
-                    </div>
-                    <div>
-                        <p class="block text-xs text-slate-500 mb-1">Historie Povýšení (Admin logs)</p>
-                        <div class="bg-slate-900 border border-slate-700 rounded p-2 text-xs text-slate-400 h-24 overflow-y-auto">
-                            <ul class="list-disc pl-4 space-y-1">
-                                <li>18.08.2026 - Povýšen na Sergeant I (Chief of Police)</li>
-                                <li>10.05.2026 - Povýšen na Officer III</li>
-                                <li>01.02.2026 - Přijat do akademie</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Footer -->
-            <div class="bg-slate-800/50 px-6 py-4 flex justify-end gap-2 border-t border-slate-700">
-                <button onclick="toggleProfileModal()" class="px-4 py-2 text-sm text-slate-300 hover:text-white">Zavřít</button>
-                <button onclick="toggleProfileModal()" class="px-4 py-2 text-sm bg-mdc-blue hover:bg-mdc-blue-hover text-white rounded">Uložit změny</button>
-            </div>
+    <!-- HLAVIČKA -->
+    <header>
+        <div class="logo" onclick="switchTab('lobby')">
+            <div class="logo-icon">G</div>
+            <span class="logo-text">GCASINO</span>
         </div>
-    </div>
 
+        <nav id="desktop-nav">
+            <button onclick="switchTab('lobby')" id="nav-lobby" class="tab-btn active">Lobby</button>
+            <button onclick="switchTab('slots')" id="nav-slots" class="tab-btn">Automaty 🎰</button>
+            <button onclick="switchTab('blackjack')" id="nav-blackjack" class="tab-btn">Blackjack 🃏</button>
+            <button onclick="switchTab('crash')" id="nav-crash" class="tab-btn">Crash 🚀</button>
+            <button onclick="switchTab('roulette')" id="nav-roulette" class="tab-btn">Ruleta 🎡</button>
+            <button onclick="switchTab('dice')" id="nav-dice" class="tab-btn">Kostky 🎲</button>
+            <button onclick="switchTab('mines')" id="nav-mines" class="tab-btn">Mines 💣</button>
+        </nav>
 
-    <!-- ========================================== -->
-    <!-- JAVASCRIPT LOGIKA WEB -->
-    <!-- ========================================== -->
-    <script>
-        // --- 1. LOGIN A DISCORD MOCKUP ---
-        function login() {
-            // Zde by v realitě proběhl přesměrování na Discord OAuth2.
-            // Pro ukázku webu to uděláme rovnou.
-            
-            // Nastavení falešných dat z "Discordu"
-            const discordUser = {
-                username: "Officer Smith",
-                rank: "Sergeant I",
-                badge: "104",
-                avatar: "https://ui-avatars.com/api/?name=Officer+Smith&background=1e3a8a&color=fff&size=128"
-            };
+        <div class="glass-panel user-box" onclick="openAccountModal()">
+            <div style="text-align: right;">
+                <div id="header-username" style="font-size: 0.75rem; color: #00f2ff; font-weight: 600;">Hráč</div>
+                <div style="font-size: 0.9rem; font-weight: 700;"><span id="header-balance">0</span> NC</div>
+            </div>
+            <div style="width: 32px; height: 32px; border-radius: 50%; background: rgba(0,242,255,0.2); border: 1px solid #00f2ff; display: flex; align-items: center; justify-content: center; font-size: 0.8rem;">👤</div>
+        </div>
+    </header>
 
-            // Vyplnění profilu vpravo nahoře
-            document.getElementById('user-name').innerText = discordUser.username;
-            document.getElementById('user-rank').innerText = discordUser.rank + ' | #' + discordUser.badge;
-            document.getElementById('user-avatar').src = discordUser.avatar;
+    <!-- HLAVNÍ OBSAH -->
+    <main>
 
-            // Vyplnění profilu v modálním okně
-            document.getElementById('modal-name').innerText = discordUser.username;
-            document.getElementById('modal-rank').innerText = discordUser.rank;
-            document.getElementById('modal-badge').innerText = "Badge: " + discordUser.badge;
-            document.getElementById('modal-avatar').src = discordUser.avatar;
+        <!-- LOBBY -->
+        <section id="tab-lobby" class="section active" style="display: block;">
+            <div class="glass-panel neon-box" style="padding: 3rem; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 2rem;">
+                <div style="max-width: 600px;">
+                    <span style="display: inline-block; padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; background: rgba(0,242,255,0.1); color: #00f2ff; border: 1px solid rgba(0,242,255,0.3); margin-bottom: 1rem;">Gcasino • GitHub & Leosight Ready</span>
+                    <h1 style="font-size: 3rem; font-weight: 800; line-height: 1.2; margin-bottom: 1rem;">Hrajte o <span style="background: linear-gradient(90deg, #00f2ff, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">NeonCoins (NC)</span></h1>
+                    <p style="color: #94a3b8; margin-bottom: 1.5rem; font-size: 1.05rem;">Každý účet má svůj vlastní nezávislý zůstatek NC. Připraveno pro GitHub Pages a Leosight hosting!</p>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <button onclick="switchTab('slots')" class="neon-button" style="padding: 0.75rem 1.5rem; border-radius: 0.75rem;">Zahrát Automaty</button>
+                        <button onclick="openAccountModal()" class="btn-glass" style="padding: 0.75rem 1.5rem;">Správa účtu</button>
+                    </div>
+                </div>
+                <div style="font-size: 5rem; padding: 2rem; background: rgba(0,242,255,0.05); border-radius: 1.5rem; border: 1px solid rgba(0,242,255,0.2);">
+                    🎰🚀💣
+                </div>
+            </div>
 
-            // Skrytí loginu a zobrazení appky
-            document.getElementById('login-screen').classList.add('hidden');
-            document.getElementById('main-app').classList.remove('hidden');
-        }
+            <div style="margin-top: 2rem;">
+                <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem; color: #00f2ff;">⚡ Výběr kasinových her</h2>
+                <div class="grid-cards">
+                    <div class="glass-panel game-card" onclick="switchTab('slots')">
+                        <div style="font-size: 2.5rem; margin-bottom: 1rem;">🎰</div>
+                        <h3 style="font-size: 1.1rem; font-weight: 700; color: #00f2ff; margin-bottom: 0.25rem;">Neon Slots</h3>
+                        <p style="color: #94a3b8; font-size: 0.9rem;">Klasický 3válcový automat s neonovými symboly.</p>
+                    </div>
+                    <div class="glass-panel game-card" onclick="switchTab('blackjack')">
+                        <div style="font-size: 2.5rem; margin-bottom: 1rem;">🃏</div>
+                        <h3 style="font-size: 1.1rem; font-weight: 700; color: #00f2ff; margin-bottom: 0.25rem;">Blackjack Pro</h3>
+                        <p style="color: #94a3b8; font-size: 0.9rem;">Porazte krupiéra v karetní hře o 21 bodů.</p>
+                    </div>
+                    <div class="glass-panel game-card" onclick="switchTab('crash')">
+                        <div style="font-size: 2.5rem; margin-bottom: 1rem;">🚀</div>
+                        <h3 style="font-size: 1.1rem; font-weight: 700; color: #00f2ff; margin-bottom: 0.25rem;">Cyber Crash</h3>
+                        <p style="color: #94a3b8; font-size: 0.9rem;">Vystřelte raketu a vyberte výhru před explozí.</p>
+                    </div>
+                    <div class="glass-panel game-card" onclick="switchTab('roulette')">
+                        <div style="font-size: 2.5rem; margin-bottom: 1rem;">🎡</div>
+                        <h3 style="font-size: 1.1rem; font-weight: 700; color: #00f2ff; margin-bottom: 0.25rem;">Neon Roulette</h3>
+                        <p style="color: #94a3b8; font-size: 0.9rem;">Vsaďte na červenou, černou nebo zelenou.</p>
+                    </div>
+                    <div class="glass-panel game-card" onclick="switchTab('dice')">
+                        <div style="font-size: 2.5rem; margin-bottom: 1rem;">🎲</div>
+                        <h3 style="font-size: 1.1rem; font-weight: 700; color: #00f2ff; margin-bottom: 0.25rem;">Cyber Dice</h3>
+                        <p style="color: #94a3b8; font-size: 0.9rem;">Házejte kostkami 1-100 a trefte šanci.</p>
+                    </div>
+                    <div class="glass-panel game-card" onclick="switchTab('mines')">
+                        <div style="font-size: 2.5rem; margin-bottom: 1rem;">💣</div>
+                        <h3 style="font-size: 1.1rem; font-weight: 700; color: #00f2ff; margin-bottom: 0.25rem;">Cyber Mines</h3>
+                        <p style="color: #94a3b8; font-size: 0.9rem;">Odkrývejte bezpečná pole a vyhněte se minám.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-        function logout() {
-            document.getElementById('main-app').classList.add('hidden');
-            document.getElementById('login-screen').classList.remove('hidden');
-        }
+        <!-- AUTOMATY -->
+        <section id="tab-slots" class="section">
+            <div class="glass-panel neon-box" style="max-width: 600px; margin: 0 auto; padding: 2rem; text-align: center;">
+                <h2 style="font-size: 1.75rem; font-weight: 700; color: #00f2ff; margin-bottom: 0.5rem;">🎰 Neon Slots</h2>
+                <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 2rem;">Zarovnejte 3 symboly pro výhru NC!</p>
 
+                <div style="display: flex; justify-content: center; gap: 1rem; margin-bottom: 2rem;">
+                    <div id="slot-1" class="glass-panel neon-box" style="width: 80px; height: 100px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem;">💎</div>
+                    <div id="slot-2" class="glass-panel neon-box" style="width: 80px; height: 100px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem;">7️⃣</div>
+                    <div id="slot-3" class="glass-panel neon-box" style="width: 80px; height: 100px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem;">⭐</div>
+                </div>
 
-        // --- 2. PŘEPÍNÁNÍ ZÁLOŽEK V MENU ---
-        function switchTab(tabName) {
-            // Skryje všechny záložky
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            
-            // Obarví tlačítka zpět do defaultu
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('bg-mdc-blue/20', 'text-blue-400');
-                btn.classList.add('text-slate-400');
-            });
+                <div id="slot-msg" style="height: 1.5rem; font-weight: 600; color: #00f2ff; margin-bottom: 1.5rem;">Připraveno ke hře</div>
 
-            // Zobrazí vybranou záložku
-            document.getElementById('tab-' + tabName).classList.remove('hidden');
-            
-            // Tady by se event target měl obarvit, zjednodušeně to zde vynechám pro čistý kód.
-        }
+                <div style="display: flex; justify-content: center; align-items: center; gap: 1rem; flex-wrap: wrap;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="font-size: 0.85rem; color: #94a3b8;">Sázka:</span>
+                        <button onclick="adjustSlotBet(-50)" class="btn-glass" style="padding: 0.25rem 0.75rem;">-</button>
+                        <span id="slot-bet" style="font-weight: 700; color: #00f2ff; width: 50px; text-align: center;">50</span>
+                        <button onclick="adjustSlotBet(50)" class="btn-glass" style="padding: 0.25rem 0.75rem;">+</button>
+                        <span style="font-size: 0.85rem; color: #94a3b8;">NC</span>
+                    </div>
+                    <button onclick="spinSlots()" class="neon-button" style="padding: 0.75rem 2rem; border-radius: 0.75rem;">ROZTOČIT</button>
+                </div>
+            </div>
+        </section>
 
+        <!-- BLACKJACK -->
+        <section id="tab-blackjack" class="section">
+            <div class="glass-panel neon-box" style="max-width: 700px; margin: 0 auto; padding: 2rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h2 style="font-size: 1.75rem; font-weight: 700; color: #00f2ff;">🃏 Blackjack Pro</h2>
+                    <div style="font-size: 0.9rem;">Sázka: <span id="bj-bet-display" style="font-weight: 700; color: #00f2ff;">100</span> NC</div>
+                </div>
 
-        // --- 3. MODÁLNÍ OKNA ---
-        function toggleProfileModal() {
-            const modal = document.getElementById('modal-profile');
-            if (modal.classList.contains('hidden')) {
-                modal.classList.remove('hidden');
-            } else {
-                modal.classList.add('hidden');
-            }
-        }
+                <div class="glass-panel" style="padding: 1rem; margin-bottom: 1rem;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: #94a3b8; margin-bottom: 0.5rem;">
+                        <span>Krupiér</span>
+                        <span>Skóre: <span id="dealer-score">-</span></span>
+                    </div>
+                    <div id="dealer-cards" style="display: flex; gap: 0.5rem; min-height: 60px;"></div>
+                </div>
 
+                <div class="glass-panel" style="padding: 1rem; margin-bottom: 1.5rem;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: #94a3b8; margin-bottom: 0.5rem;">
+                        <span>Hráč (<span id="bj-username"></span>)</span>
+                        <span>Skóre: <span id="player-score">-</span></span>
+                    </div>
+                    <div id="player-cards" style="display: flex; gap: 0.5rem; min-height: 60px;"></div>
+                </div>
 
-        // --- 4. UKÁZKA PROPOJENÍ S API (MTA DATABÁZÍ) ---
-        function searchMockPerson() {
-            const input = document.getElementById('person-search-input').value;
-            const resultsBody = document.getElementById('person-results');
-            
-            if(!input) return;
-            
-            resultsBody.innerHTML = `<tr><td colspan="5" class="py-4 text-center text-mdc-blue"><i class="fa-solid fa-spinner fa-spin mr-2"></i> Hledám v Owl Gaming DB...</td></tr>`;
+                <div id="bj-msg" style="text-align: center; font-weight: 600; color: #00f2ff; margin-bottom: 1.5rem;">Vsaďte a začněte hru</div>
 
-            /* 
-            ZDE JE TEN "MOST" K OWL GAMING DB!
-            V reálu by kód vypadal nějak takto:
+                <div id="bj-controls-bet" style="display: flex; justify-content: center; align-items: center; gap: 1rem;">
+                    <button onclick="adjustBjBet(-50)" class="btn-glass" style="padding: 0.25rem 0.75rem;">-</button>
+                    <span id="bj-bet" style="font-weight: 700; color: #00f2ff; width: 50px; text-align: center;">100</span> NC
+                    <button onclick="adjustBjBet(50)" class="btn-glass" style="padding: 0.25rem 0.75rem;">+</button>
+                    <button onclick="startBlackjack()" class="neon-button" style="padding: 0.75rem 1.5rem; border-radius: 0.75rem;">ZAČÍT HRU</button>
+                </div>
 
-            fetch('https://tvujweb.cz/api.php?action=search_person&name=' + input)
-                .then(response => response.json())
-                .then(data => {
-                    // vytvořit HTML tabulku z dat
-                });
-            
-            Pro ukázku vygeneruji falešná data za 1 sekundu:
-            */
-            setTimeout(() => {
-                resultsBody.innerHTML = `
-                    <tr class="border-t border-slate-700/50 hover:bg-slate-800/50 transition-colors">
-                        <td class="py-3 px-4 text-white font-medium">Mike Johnson</td>
-                        <td class="py-3 px-4 text-slate-400">#4921</td>
-                        <td class="py-3 px-4 text-slate-400">Muž</td>
-                        <td class="py-3 px-4"><span class="bg-green-500/10 text-green-500 px-2 py-1 rounded text-xs border border-green-500/20">Čistý</span></td>
-                        <td class="py-3 px-4 text-right">
-                            <button class="text-mdc-blue hover:text-white px-3 py-1 rounded bg-slate-800 border border-slate-700 text-xs">Otevřít profil</button>
-                        </td>
-                    </tr>
-                    <tr class="border-t border-slate-700/50 hover:bg-slate-800/50 transition-colors">
-                        <td class="py-3 px-4 text-white font-medium">Mike Vazowski</td>
-                        <td class="py-3 px-4 text-slate-400">#5012</td>
-                        <td class="py-3 px-4 text-slate-400">Muž</td>
-                        <td class="py-3 px-4"><span class="bg-red-500/10 text-red-500 px-2 py-1 rounded text-xs border border-red-500/20">Warrant</span></td>
-                        <td class="py-3 px-4 text-right">
-                            <button class="text-mdc-blue hover:text-white px-3 py-1 rounded bg-slate-800 border border-slate-700 text-xs">Otevřít profil</button>
-                        </td>
-                    </tr>
-                `;
-            }, 800);
-        }
-    </script>
-</body>
-</html>
+                <div id="bj-controls-play" style="display: none; justify-content: center; gap: 1rem;">
+                    <button onclick="bjHit()" class="neon-button" style="padding: 0.75rem 1.5rem; border-radius: 0.75rem;">HIT</button>
+                    <button onclick="bjStand()" class="btn-glass" style="padding: 0.75rem 1.5rem;">STAND</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- CRASH -->
+        <section id="tab-crash" class="section">
+            <div class="glass-panel neon-box" style="max-width: 600px; margin: 0 auto; padding: 2rem; text-align: center;">
+                <h2 style="font-size: 1.75rem; font-weight: 700; color: #00f2ff; margin-bottom: 0.5rem;">🚀 Cyber Crash</h2>
+                <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 1.5rem;">Vyberte NC před explozí rakety!</p>
+
+                <div class="glass-panel neon-box" style="height: 180px; display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 1.5rem; position: relative;">
+                    <div id="crash-multiplier" style="font-size: 3.5rem; font-weight: 900; color: #00f2ff;" class="neon-glow">1.00x</div>
+                    <div id="crash-status" style="font-size: 0.8rem; color: #94a3b8; margin-top: 0.5rem;">Připraveno ke startu</div>
+                </div>
+
+                <div style="display: flex; justify-content: center; align-items: center; gap: 1rem; flex-wrap: wrap;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="font-size: 0.85rem; color: #94a3b8;">Sázka:</span>
+                        <button onclick="adjustCrashBet(-50)" class="btn-glass" style="padding: 0.25rem 0.75rem;">-</button>
+                        <span id="crash-bet" style="font-weight: 700; color: #00f2ff; width: 50px; text-align: center;">100</span>
+                        <span style="font-size: 0.85rem; color: #94a3b8;">NC</span>
+                    </div>
+                    <button onclick="startCrash()" id="crash-start-btn" class="neon-button" style="padding: 0.75rem 2rem; border-radius: 0.75rem;">START</button>
+                    <button onclick="cashOutCrash()" id="crash-cashout-btn" style="display: none; background: #10b981; color: #000; font-weight: 700; padding: 0.75rem 2rem; border-radius: 0.75rem; border: none; cursor: pointer; box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);">CASH OUT</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- RULETA -->
+        <section id="tab-roulette" class="section">
+            <div class="glass-panel neon-box" style="max-width: 600px; margin: 0 auto; padding: 2rem; text-align: center;">
+                <h2 style="font-size: 1.75rem; font-weight: 700; color: #00f2ff; margin-bottom: 0.5rem;">🎡 Neon Roulette</h2>
+                <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 1.5rem;">Vsaďte na barvu a vyhrajte až 14x!</p>
+
+                <div id="roulette-wheel" class="glass-panel neon-box" style="width: 100px; height: 100px; margin: 0 auto 1.5rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; border: 3px solid #00f2ff; transition: 1s;">
+                    🎡
+                </div>
+
+                <div id="roulette-msg" style="height: 1.5rem; font-weight: 600; color: #00f2ff; margin-bottom: 1.5rem;">Vyberte barvu sázky</div>
+
+                <div style="display: flex; justify-content: center; gap: 0.75rem; margin-bottom: 1.5rem;">
+                    <button onclick="setRouletteColor('red')" id="btn-bet-red" style="padding: 0.75rem 1.25rem; border-radius: 0.75rem; font-weight: 700; background: rgba(220, 38, 38, 0.3); border: 1px solid #dc2626; color: #fca5a5; cursor: pointer;">Červená (2x)</button>
+                    <button onclick="setRouletteColor('green')" id="btn-bet-green" style="padding: 0.75rem 1.25rem; border-radius: 0.75rem; font-weight: 700; background: rgba(16, 185, 129, 0.3); border: 1px solid #10b981; color: #6ee7b7; cursor: pointer;">Zelená (14x)</button>
+                    <button onclick="setRouletteColor('black')" id="btn-bet-black" style="padding: 0.75rem 1.25rem; border-radius: 0.75rem; font-weight: 700; background: rgba(30, 41, 59, 0.8); border: 1px solid #475569; color: #cbd5e1; cursor: pointer;">Černá (2x)</button>
+                </div>
+
+                <div style="display: flex; justify-content: center; align-items: center; gap: 1rem; flex-wrap: wrap;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="font-size: 0.85rem; color: #94a3b8;">Sázka:</span>
+                        <button onclick="adjustRouletteBet(-50)" class="btn-glass" sty
